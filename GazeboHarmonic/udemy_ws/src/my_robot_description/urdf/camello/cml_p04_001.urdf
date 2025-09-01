@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<robot name="cml_p04_001"
+  xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="ground_clearance" value="0.115"/>
+
+  <!--                        -->
+  <!--    Robot Base Param    -->
+  <!--                        -->
+
+  <!-- Main body (excluding compartment) -->
+  <xacro:property name="base_width" value="0.6762"/>
+  <xacro:property name="base_length_front" value="0.4616"/>
+  <xacro:property name="base_length" value="${0.4616*2}"/>
+  <xacro:property name="base_height" value="1.1"/>
+
+  <!-- To simplify model, assume front wheel size = rear wheel size -->
+  <xacro:property name="wheel_radius" value="${0.266 / 2}"/>
+  <xacro:property name="wheel_width" value="${0.3381 - 0.2421}"/>
+  <xacro:property name="wheel_yoff" value="0.2886"/>
+  <xacro:property name="wheel_xoff" value="0.3"/>
+
+  <!--                        -->
+  <!--      SENSOR PARAM      -->
+  <!--                        -->
+
+  <!-- NOT USED. revert back to velodyne kept incase we need it back -->
+  <!-- microscan100 -->
+  <xacro:property name="microscan100_height" value="0.0985"/>
+  <xacro:property name="microscan100_diameter" value="0.100"/>
+  <!-- mounting offset to tripod mount -->
+  <xacro:property name="microscan100_zoff" value="1.2055"/>
+  <xacro:property name="microscan100_xoff" value="0.2665"/>
+  <xacro:property name="microscan100_rpy" value="0 0 0"/>
+  <!-- offset to tripod mount to (0, 0, 0) of scanner -->
+  <xacro:property name="microscan100_zoff_scan_origin" value="0.05655"/>
+
+  <!-- Velodyne VLP-16 (TODO: need dimension spec) -->
+  <xacro:property name="vlp16_height" value="0.072"/>
+  <xacro:property name="vlp16_diameter" value="0.103"/>
+  <!-- mounting offset to tripod mount -->
+  <xacro:property name="vlp16_zoff" value="1.2055"/>
+  <xacro:property name="vlp16_xoff" value="0.2665"/>
+  <xacro:property name="vlp16_rpy" value="0 0 1.571"/>
+
+  <!-- offset to tripod mount to (0, 0, 0) of scanner -->
+  <xacro:property name="vlp16_zoff_scan_origin" value="0.05655"/>
+
+
+  <!-- LIDAR -->
+  <xacro:property name="lidar_height" value="${vlp16_height}"/>
+  <xacro:property name="lidar_diameter" value="${vlp16_diameter}"/>
+  <!-- mounting offset to tripod mount -->
+  <xacro:property name="lidar_zoff" value="${vlp16_zoff}"/>
+  <xacro:property name="lidar_yoff" value="${vlp16_yoff}"/>
+  <xacro:property name="lidar_xoff" value="${vlp16_xoff}"/>
+  <xacro:property name="lidar_mount_rpy" value="${vlp16_rpy}"/>
+
+  <!-- offset to tripod mount to (0, 0, 0) of scanner -->
+  <xacro:property name="lidar_zoff_scan_origin" value="${vlp16_zoff_scan_origin}"/>
+
+  <!-- FRONT TOP Realsense D435 -->
+  <xacro:property name="front_top_cam_height" value="0.029"/>
+  <xacro:property name="front_top_cam_depth_px" value="0.0158"/>
+  <xacro:property name="front_top_cam_depth_pz" value="${front_top_cam_height / 2}"/>
+  <!-- D435 mounting offset to front center of camera -->
+  <xacro:property name="base_link_to_center" value="0.300"/>
+  <!-- estimating d435 atm -->
+  <xacro:property name="front_top_xoff" value="${base_link_to_center + 0.4238}"/>
+  <xacro:property name="front_top_yoff" value="0.0"/>
+  <xacro:property name="front_top_zoff" value="1.07"/>
+  <!-- D435 tilt angle -->
+  <xacro:property name="front_top_pitch" value="0.87"/>
+
+  <!-- FRONT BOTTOM Realsense D455  TODO: NEED TO UPDATE LOCATION-->
+  <xacro:property name="front_btm_cam_height" value="0.025"/>
+  <xacro:property name="front_btm_cam_depth_px" value="0.0149"/>
+  <xacro:property name="front_btm_cam_depth_pz" value="${front_btm_cam_height / 2}"/>
+  <!-- D435 mounting offset to front center of camera -->
+  <!-- estimating d455 atm -->
+  <xacro:property name="front_btm_xoff" value="${base_link_to_center + 0.45}"/>
+  <xacro:property name="front_btm_yoff" value="0.0"/>
+  <xacro:property name="front_btm_zoff" value="0.37"/>
+  <xacro:property name="front_btm_yaw" value="0"/>
+
+  <!-- REAR BOTTOM Realsense D435 -->
+  <xacro:property name="rear_btm_cam_height" value="0.025"/>
+  <xacro:property name="rear_btm_cam_depth_px" value="0.0149"/>
+  <xacro:property name="rear_btm_cam_depth_pz" value="${rear_btm_cam_height / 2}"/>
+  <!-- D435 mounting offset to rear center of camera -->
+  <!-- estimating d455 atm -->
+  <xacro:property name="rear_btm_xoff" value="-0.112"/>
+  <xacro:property name="rear_btm_zoff" value="0.234"/>
+  <xacro:property name="rear_btm_yaw" value="3.142"/>
+
+  <!-- import realsense urdf -->
+  <xacro:arg name="use_nominal_extrinsics" default="false"/>
+  <xacro:include filename="$(find realsense2_description)/urdf/_materials.urdf.xacro" />
+  <xacro:include filename="$(find realsense2_description)/urdf/_usb_plug.urdf.xacro" />
+  <!-- custom urdf due to issue when adding two urdf from realsense -->
+  <xacro:include filename="$(find cml_p04_xxx_description)/urdf/_d435.urdf.xacro" />
+  <xacro:include filename="$(find cml_p04_xxx_description)/urdf/_d455.urdf.xacro" />
+  <!-- <xacro:include filename="$(find realsense2_description)/urdf/_d455.urdf.xacro"/> -->
+
+  <!--                        -->
+  <!--       Robot Base       -->
+  <!--                        -->
+
+  <!-- Robot Base -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="${base_length} ${base_width} ${base_height}"/>
+      </geometry>
+      <origin xyz="${wheel_xoff} 0.0 ${(base_height/2) + ground_clearance}" rpy="0 0 0"/>
+      <material name="Cyan">
+        <color rgba="0 1.0 1.0 0.5"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Wheels -->
+  <xacro:macro name="wheel" params="prefix x_reflect y_reflect">
+    <link name="${prefix}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <material name="Gray">
+          <color rgba="0.5 0.5 0.5 0.5"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="${x_reflect*wheel_xoff} ${y_reflect*wheel_yoff} ${wheel_radius}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:wheel prefix="wheel_FL" x_reflect="2" y_reflect="1" />
+  <xacro:wheel prefix="wheel_FR" x_reflect="2" y_reflect="-1" />
+  <xacro:wheel prefix="wheel_RL" x_reflect="0" y_reflect="1" />
+  <xacro:wheel prefix="wheel_RR" x_reflect="0" y_reflect="-1" />
+
+  <!--                        -->
+  <!--         SENSOR         -->
+  <!--                        -->
+
+  <!-- LIDAR  -->
+  <link name="lidar_mount">
+    <visual>
+      <origin xyz="0 0 ${lidar_height/2}" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="${lidar_height}" radius="${lidar_diameter/2}"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="base_link_to_lidar_mount" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_mount"/>
+    <origin xyz="${wheel_xoff + lidar_xoff} 0 ${lidar_zoff + ground_clearance}" rpy="${lidar_mount_rpy}"/>
+  </joint>
+
+  <link name="velodyne"/>
+
+  <joint name="lidar_mount_to_origin" type="fixed">
+    <parent link="lidar_mount"/>
+    <child link="velodyne"/>
+    <origin xyz="0 0 ${lidar_zoff_scan_origin}"/>
+  </joint>
+
+  <!-- Realsense Camera -->
+  <xacro:sensor_d435 parent="base_link" name="camera_front_top" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <origin xyz="${front_top_xoff - front_top_cam_depth_px} ${front_top_yoff} ${front_top_zoff - front_top_cam_depth_pz}" rpy="0 ${front_top_pitch} 0"/>
+  </xacro:sensor_d435>
+
+  <xacro:sensor_d455 parent="base_link" name="camera_front_btm" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <origin xyz="${front_btm_xoff - front_btm_cam_depth_px} ${front_btm_yoff} ${front_btm_zoff - front_btm_cam_depth_pz}" rpy="0 0 ${front_btm_yaw}"/>
+  </xacro:sensor_d455>
+
+  <xacro:sensor_d435 parent="base_link" name="camera_rear_btm" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <origin xyz="${rear_btm_xoff - rear_btm_cam_depth_px} 0 ${rear_btm_zoff - rear_btm_cam_depth_pz}" rpy="0 0 ${rear_btm_yaw}"/>
+  </xacro:sensor_d435>
+
+</robot>
