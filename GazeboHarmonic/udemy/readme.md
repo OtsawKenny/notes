@@ -247,4 +247,20 @@ ros2 topic pub -r 1 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.5}, angular
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
+### Creating your own world 
+https://gazebosim.org/docs/harmonic/fuel_insert/
+
 ## Section 7: 
+```
+# See joint states
+ros2 topic echo /joint_states
+
+# Command the lift (5 cm up)
+ros2 topic pub -1 /lift/cmd_pos std_msgs/Float64 "data: 0.05"
+
+# Max up (20 cm)
+ros2 topic pub -1 /lift/cmd_pos std_msgs/Float64 "data: 0.2"
+
+# Down
+ros2 topic pub -1 /lift/cmd_pos std_msgs/Float64 "data: 0.0"
+```

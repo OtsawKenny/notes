@@ -11,7 +11,7 @@
         <!-- <visual name='base_link'>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://my_robot_description/meshes/tinyRobot_body.dae" scale="1.2 1.2 1.2">
+                <mesh filename="package://my_robot_description/meshes/camello_shell.dae" scale="1.2 1.2 1.2">
                 </mesh>
             </geometry>
         </visual> -->
@@ -34,20 +34,36 @@
     <link name="second_link">
         <visual>
             <geometry>
-                <cylinder radius="0.1" length="0.2" />
+                <cylinder radius="0.05" length="0.05" />
             </geometry>
-            <origin xyz="0 0 0.1" rpy="0 0 0" />
+            <origin xyz="0 0 0.025" rpy="0 0 0" />
             <material name="grey" />
         </visual>
+        <collision>
+            <geometry>
+                <box size="0.2 0.2 0.2" />
+            </geometry>
+            <origin xyz="0 0 0.1" rpy="0 0 0" />
+        </collision>
+        <xacro:box_inertia m="1.0" x="0.2" y="0.2"
+            z="0.2" o_xyz="0 0 0.1" o_rpy="0 0 0" />
     </link>
     <link name="third_link">
         <visual>
             <geometry>
-                <box size="0.1 0.1 0.1" />
+                <box size="${base_link_length-0.3} ${base_link_width-0.3} ${base_link_height-0.3}" />
             </geometry>
             <origin xyz="0 0 0.05" rpy="0 0 0" />
             <material name="grey" />
         </visual>
+        <collision>
+            <geometry>
+                <box size="0.1 0.1 0.1" />
+            </geometry>
+            <origin xyz="0 0 0.05" rpy="0 0 0" />
+        </collision>
+        <xacro:box_inertia m="1.0" x="0.1" y="0.1"
+            z="0.1" o_xyz="0 0 0.05" o_rpy="0 0 0" />
     </link>
 
     <link name="right_rear_wheel_link">
@@ -125,7 +141,7 @@
     <joint name="base_second_joint" type="fixed">
         <parent link="base_link" />
         <child link="second_link" />
-        <origin xyz="0 0 ${base_link_height}" rpy="0 0 0" />
+        <origin xyz="${base_link_length/2.0} 0 ${base_link_height}" rpy="0 0 0" />
         <!-- <axis xyz="0 0 1"/>
         <limit lower="-1.57" upper="1.57" effort="10" velocity="1"/> -->
     </joint>
@@ -145,11 +161,12 @@
     </joint> -->
 
     <joint name="base_third_joint" type="prismatic">
-        <parent link="second_link" />
-        <child link="third_link" />
-        <origin xyz="0 0 0.2" rpy="0 0 0" />
-        <axis xyz="0 0 1" />
-        <limit lower="0.0" upper="0.2" effort="10" velocity="0.1" />
+        <parent link="base_link"/>
+        <child link="third_link"/>
+        <origin xyz="0 0 ${base_link_height-0.2}" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="0.0" upper="0.2" effort="150" velocity="0.4"/>
+        <dynamics damping="5.0" friction="0.0"/>
     </joint>
 
     <!-- Adding a Wheel -->

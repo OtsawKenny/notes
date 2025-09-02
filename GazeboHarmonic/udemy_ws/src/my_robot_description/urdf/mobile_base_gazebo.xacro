@@ -29,6 +29,23 @@
             <joint_name>base_right_rear_wheel_joint</joint_name>
             <joint_name>base_left_front_wheel_joint</joint_name>
             <joint_name>base_right_front_wheel_joint</joint_name>
+
+            <!-- Add your prismatic joint here -->
+            <joint_name>base_third_joint</joint_name>
         </plugin>
     </gazebo>
+
+    <gazebo>
+        <plugin filename="gz-sim-joint-position-controller-system"
+                name="gz::sim::systems::JointPositionController">
+            <joint_name>base_third_joint</joint_name>
+            <topic>/lift/cmd_pos</topic>
+            <p_gain>200</p_gain>
+            <i_gain>0.0</i_gain>
+            <d_gain>10.0</d_gain>
+            <cmd_max>200</cmd_max>
+            <cmd_min>-200</cmd_min>
+        </plugin>
+    </gazebo>
+
 </robot>
