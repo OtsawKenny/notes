@@ -11,7 +11,7 @@
         <!-- <visual name='base_link'>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://my_robot_description/meshes/camello_shell.dae" scale="1.2 1.2 1.2">
+                <mesh filename="package://my_robot_description/meshes/camello_shell.dae" scale="1 1 1">
                 </mesh>
             </geometry>
         </visual> -->

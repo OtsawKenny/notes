@@ -224,6 +224,7 @@ https://github.com/gazebosim/ros_gz/tree/ros2/ros_gz_bridge
 ```bash
 gz topic -i -t /clock
 gz topic -h
+gz topic -l
 
 ros2 topic list
 ros2 topic info /clock
@@ -251,9 +252,10 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 https://gazebosim.org/docs/harmonic/fuel_insert/
 
 ## Section 7: 
-```
+```bash
 # See joint states
 ros2 topic echo /joint_states
+
 
 # Command the lift (5 cm up)
 ros2 topic pub -1 /lift/cmd_pos std_msgs/Float64 "data: 0.05"
@@ -264,3 +266,60 @@ ros2 topic pub -1 /lift/cmd_pos std_msgs/Float64 "data: 0.2"
 # Down
 ros2 topic pub -1 /lift/cmd_pos std_msgs/Float64 "data: 0.0"
 ```
+
+
+
+# Hookup into RMF 
+## Convert into sdf files
+```
+xacro my_robot.urdf.xacro > my_robot.urdf
+gz sdf -p my_robot.urdf > my_robot.sdf
+
+change to model.sdf and model.config
+```
+### slotcar plugin
+Example: navigate
+```bash
+ros2 topic pub -1 /robot_path_requests rmf_fleet_msgs/msg/PathRequest "fleet_name: 'tinyRobot'
+robot_name: 'tinyRobot1'
+task_id: '1'
+path:
+- t: {sec: 0, nanosec: 0}
+  x: 234.637
+  y: -627.396
+  yaw: 0.05417
+  level_name: 'L1'
+- t: {sec: 0, nanosec: 0}
+  x: 265.655
+  y: -625.714
+  yaw: 0.09064
+  level_name: 'L1'"
+```
+Example: stop
+```bash
+ros2 topic pub /robot_path_requests rmf_fleet_msgs/msg/PathRequest "fleet_name: 'tinyRobot'
+robot_name: 'tinyRobot1'
+task_id: '99'
+path:
+- {t: {sec: 0, nanosec: 0}, x:  cur_x, y:  cur_y, yaw: cur_yaw, level_name: 'L1'}
+- {t: {sec: 0, nanosec: 0}, x:  cur_x, y:  cur_y, yaw: cur_yaw, level_name: 'L1'}"
+```
+robot_mode_requests — rmf_fleet_msgs/msg/ModeRequest
+Toggle modes / actions (e.g., attach or detach cart).
+
+Set: fleet_name, robot_name, mode.mode (e.g., RobotMode.MODE_PERFORMING_ACTION, RobotMode.MODE_IDLE), mode.mode_request_id (int), mode.performing_action (string like 'attach_cart' or 'detach_cart').
+
+Example: robot_mode 
+```bash
+ros2 topic pub /robot_mode_requests rmf_fleet_msgs/msg/ModeRequest "fleet_name: 'FLEET_A'
+robot_name: 'TinyRobot'
+mode:
+  mode: 5
+  mode_request_id: 123
+  performing_action: 'attach_cart'"
+```
+*(Replace 5 with the enum for MODE_PERFORMING_ACTION if your CLI supports names; many shells require the numeric value.
+
+)
+
+
