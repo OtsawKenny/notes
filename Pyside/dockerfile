@@ -1,0 +1,18 @@
+# Base image with Python 3.8
+FROM python:3.8-slim
+
+# Set working directory
+WORKDIR /app
+
+# Upgrade pip
+RUN pip install --upgrade pip
+
+# Copy requirements first (if you have any)
+COPY requirements.txt ./
+RUN pip install -r requirements.txt || true
+
+# Copy project files
+COPY . .
+
+# Default command (can be overridden in docker-compose)
+CMD ["python", "main.py"]

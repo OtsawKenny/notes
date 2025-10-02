@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  python38-app:
+    build: .
+    container_name: python38-app
+    volumes:
+      - .:/app
+    command: python main.py
