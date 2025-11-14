@@ -1,0 +1,7 @@
+### Get all books
+GET http://127.0.0.1:8000/books
+Accept: application/json
+
+### Get book
+GET http://127.0.0.1:8000/books/1
+Accept: application/json
