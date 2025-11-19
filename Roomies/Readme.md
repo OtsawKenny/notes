@@ -123,3 +123,204 @@ Contacting potential roommates
 Saving / bookmarking profiles
 Chatting to build trust
 Arranging meetups or viewings
+
+
+1️⃣ Actors (who’s in the story)
+- Landlord
+- Tenant / Room Seeker
+- Roomies System (backend)
+- Payment Provider (Stripe/Momo/VNPay etc., later)
+- Admin / Moderator
+
+2️⃣ Big Picture Domains
+Think of these as mini-systems:
+- Identity & Profiles
+- Listings & Availability
+- Search & Matching
+- Messaging & Contact
+- Trust & Verification
+- Boost & Monetization
+
+Contracts & Agreements
+
+Moderation & Reporting
+
+We’ll event-storm a few main flows across these.
+
+3️⃣ Flow 1: Landlord creates & manages a room listing
+Timeline (Domain Events)
+
+UserRegistered
+
+ProfileCompleted
+
+LandlordRoleActivated (user chooses “I’m a landlord” / “I have a room to rent”)
+
+ListingDraftCreated
+
+ListingPhotosUploaded
+
+ListingDetailsUpdated (price, address, room type, rules, etc.)
+
+ListingSubmittedForReview
+
+ListingApproved (by automated checks or admin)
+
+ListingPublished
+
+ListingBoostPurchased (optional)
+
+ListingBoostActivated
+
+ListingBoostExpired
+
+ListingUpdated (price changed, title updated, etc.)
+
+ListingSuspended (policy violation or landlord pause)
+
+ListingUnpublished (room rented or landlord removes it)
+
+Commands that trigger those events
+
+RegisterUser
+
+CompleteProfile
+
+ActivateLandlordRole
+
+CreateListingDraft
+
+UploadListingPhotos
+
+UpdateListingDetails
+
+SubmitListingForReview
+
+ApproveListing
+
+PublishListing
+
+PurchaseListingBoost
+
+ActivateListingBoost
+
+ExpireListingBoost
+
+UpdateListing
+
+SuspendListing
+
+UnpublishListing
+
+Main Aggregates here
+
+User (id, profile, roles)
+
+Listing (id, landlordId, status, details, photos, boost state)
+
+Boost (id, listingId, type, startAt, endAt)
+
+4️⃣ Flow 2: Tenant searches & contacts landlord
+Timeline (Domain Events)
+
+TenantSearchStarted
+
+SearchFiltersApplied (city, budget, duration, gender preference, etc.)
+
+ListingsViewed
+
+ListingFavorited
+
+ContactRequestSent (tenant writes message / click “Contact landlord”)
+
+ConversationThreadCreated
+
+MessageSent
+
+MessageDelivered
+
+MessageRead
+
+ViewingRequested (tenant wants to view)
+
+ViewingScheduled
+
+ViewingCompleted
+
+TenantShortlistedByLandlord
+
+TenantRejectedByLandlord
+
+TenantConfirmedInterest
+
+RoomReservedForTenant (soft lock / tentative)
+
+ReservationExpired (tenant no response or time limit reached)
+
+Commands
+
+StartTenantSearch
+
+ApplySearchFilters
+
+ViewListing
+
+FavoriteListing
+
+SendContactRequest
+
+SendMessage
+
+ScheduleViewing
+
+ConfirmViewing
+
+MarkViewingCompleted
+
+ShortlistTenant
+
+RejectTenant
+
+ConfirmTenantInterest
+
+ReserveRoomForTenant
+
+ExpireReservation
+
+Aggregates
+
+SearchSession (ephemeral, maybe not a true aggregate, but you can track)
+
+Conversation (id, participants, messages)
+
+Viewing (id, listingId, tenantId, time, status)
+
+Reservation (id, listingId, tenantId, expiresAt)
+
+
+
+
+1. MVP SCOPE (ONLY WHAT IS NEEDED)
+Your MVP should have 3 things only:
+
+✔ 1. Landlord can post a room
+Title
+Description
+Price
+Location
+Room type
+Photos
+Gender preference
+Contact (phone or “chat”)
+
+✔ 2. Tenant can browse & filter
+City
+District
+Price
+Gender preference
+Room type
+Verified landlord badge (optional)
+
+✔ 3. Tenant → Landlord contact
+Simple chat OR redirect to landlord’s Zalo/phone
+(keep it super simple first)
