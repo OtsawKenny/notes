@@ -25,7 +25,12 @@ https://www.youtube.com/watch?v=Q5sI2ELKrh0
 
 - Compiler Errors
 - Compiler Warnings
-- Linker Errors
-- RunTime erros
+- Linker Errors , eg. undefined reference to `x'
+- RunTime errors , eg. File not found , Out of memory ( exception handling needs to be good)
+- Logic errors, eg. mistakes made by the programmer
 
-## Structure of a C++ Program
+## Section5- Sturcture of a C++ Module
+[text](Section5_Structure_of_a_C++Module)
+
+## Section6- Variables and Constants
+[text](Section6.md)
