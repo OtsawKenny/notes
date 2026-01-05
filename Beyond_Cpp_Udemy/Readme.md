@@ -34,3 +34,16 @@ https://www.youtube.com/watch?v=Q5sI2ELKrh0
 
 ## Section6- Variables and Constants
 [text](Section6.md)
+
+
+
+# Recommendation from friends
+Yea this vid is golden lol
+All the memory stuff
+Go learn how to use gdb also
+https://www.youtube.com/watch?v=zuegQmMdy8M&t=120s
+
+from wk
+
+https://youtu.be/18c3MTX0PK0?si=ZI6oOHN7Lzr5PiCS
+https://www.learncpp.com/#google_vignette
